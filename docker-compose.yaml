@@ -1,8 +1,22 @@
 services:
-  vite-app:
+  chat-app-frontend:
     build:
+      context: .
       dockerfile: ./dockerfile/main.dockerfile
-    container_name: vite-app
-    ports:
-      - "80:80"
+    container_name: chat-app-frontend
     restart: unless-stopped
+    networks:
+      - chat-app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=chat-app"
+
+      - "traefik.http.routers.chat-frontend.rule=Host(`chat.localhost`)"
+      - "traefik.http.routers.chat-frontend.entrypoints=web"
+      - "traefik.http.routers.chat-frontend.service=chat-frontend-service"
+      - "traefik.http.services.chat-frontend-service.loadbalancer.server.port=80"
+
+networks:
+  chat-app:
+    external: true
+    name: chat-app
