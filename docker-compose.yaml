@@ -1,7 +1,6 @@
 services:
   chat-app-frontend:
     build:
-      context: .
       dockerfile: ./dockerfile/main.dockerfile
     container_name: chat-app-frontend
     restart: unless-stopped
@@ -15,6 +14,17 @@ services:
       - "traefik.http.routers.chat-frontend.entrypoints=web"
       - "traefik.http.routers.chat-frontend.service=chat-frontend-service"
       - "traefik.http.services.chat-frontend-service.loadbalancer.server.port=80"
+
+  chat-app-frontend-nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.5.1
+    container_name: chat-app-frontend-nginx-exporter
+    restart: unless-stopped
+    command:
+      - "--nginx.scrape-uri=http://chat-app-frontend:80/stub_status"
+    networks:
+      - chat-app
+    depends_on:
+      - chat-app-frontend
 
 networks:
   chat-app:
