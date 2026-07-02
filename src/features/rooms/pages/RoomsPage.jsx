@@ -49,7 +49,7 @@ export default function RoomsPage() {
 
 
   async function handleDeleteRoom(roomId) {
-    const confirmed = window.confirm('Delete this room? The backend will decide whether message history is also deleted.')
+    const confirmed = window.confirm('Delete this room? Message history may also be removed.')
     if (!confirmed) return
 
     setDeletingRoomId(roomId)
@@ -70,7 +70,7 @@ export default function RoomsPage() {
         <div className="panel-heading">
           <p className="eyebrow">Room management</p>
           <h1>Create group chat room</h1>
-          <p>Rooms are created through HTTP, while the room messages are delivered through MQTT topics.</p>
+          <p>Create a group space for your team conversations.</p>
         </div>
 
         {formError && <div className="alert alert-danger">{formError}</div>}

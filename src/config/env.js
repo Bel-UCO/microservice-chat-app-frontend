@@ -2,9 +2,12 @@ function readEnv(key, fallback = '') {
   return import.meta.env[key] || fallback
 }
 
+const sharedApiBaseUrl = readEnv('VITE_API_BASE_URL', 'http://api.localhost')
+
 export const env = {
   appName: readEnv('VITE_APP_NAME', 'PulseChat'),
-  apiBaseUrl: readEnv('VITE_API_BASE_URL', 'http://localhost:3000/api'),
+  authApiBaseUrl: readEnv('VITE_AUTH_API_URL', sharedApiBaseUrl),
+  chatApiBaseUrl: readEnv('VITE_CHAT_API_URL', sharedApiBaseUrl),
   mqttUrl: readEnv('VITE_MQTT_URL', 'ws://localhost:8083/mqtt'),
   mqttUsername: readEnv('VITE_MQTT_USERNAME'),
   mqttPassword: readEnv('VITE_MQTT_PASSWORD'),

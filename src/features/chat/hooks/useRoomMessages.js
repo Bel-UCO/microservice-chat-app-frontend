@@ -30,6 +30,15 @@ export function useRoomMessages(roomId) {
     }
   }, [roomId])
 
+  const sendMessage = useCallback(
+    async (content) => {
+      const createdMessage = await messageApi.sendMessage(roomId, content)
+      appendMessage(createdMessage)
+      return createdMessage
+    },
+    [appendMessage, roomId],
+  )
+
   useEffect(() => {
     setMessages([])
     fetchMessages()
@@ -41,5 +50,6 @@ export function useRoomMessages(roomId) {
     messagesError,
     fetchMessages,
     appendMessage,
+    sendMessage,
   }
 }

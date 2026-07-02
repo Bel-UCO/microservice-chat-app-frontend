@@ -10,9 +10,18 @@ export class HttpError extends Error {
   }
 }
 
-function buildUrl(path) {
+function getBaseUrl(api) {
+  if (api === 'auth') return env.authApiBaseUrl
+  return env.chatApiBaseUrl
+}
+
+function buildUrl(path, api) {
   if (path.startsWith('http')) return path
-  return `${env.apiBaseUrl}${path.startsWith('/') ? path : `/${path}`}`
+
+  const baseUrl = getBaseUrl(api).replace(/\/$/, '')
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+
+  return `${baseUrl}${normalizedPath}`
 }
 
 async function parseResponse(response) {
@@ -27,12 +36,13 @@ async function parseResponse(response) {
 async function request(path, options = {}) {
   const token = readAuthToken()
   const headers = new Headers(options.headers || {})
+  const { api = 'chat', ...fetchOptions } = options
 
   if (!headers.has('Accept')) {
     headers.set('Accept', 'application/json')
   }
 
-  if (options.body && !(options.body instanceof FormData) && !headers.has('Content-Type')) {
+  if (fetchOptions.body && !(fetchOptions.body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }
 
@@ -40,13 +50,13 @@ async function request(path, options = {}) {
     headers.set('Authorization', `Bearer ${token}`)
   }
 
-  const response = await fetch(buildUrl(path), {
-    ...options,
+  const response = await fetch(buildUrl(path, api), {
+    ...fetchOptions,
     headers,
     body:
-      options.body && !(options.body instanceof FormData)
-        ? JSON.stringify(options.body)
-        : options.body,
+      fetchOptions.body && !(fetchOptions.body instanceof FormData)
+        ? JSON.stringify(fetchOptions.body)
+        : fetchOptions.body,
   })
 
   const data = await parseResponse(response)

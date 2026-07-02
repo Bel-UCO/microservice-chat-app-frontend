@@ -34,7 +34,7 @@ export function MessageComposer({ disabled, onSend }) {
         <input
           disabled={disabled || isSending}
           onChange={(event) => setContent(event.target.value)}
-          placeholder={disabled ? 'MQTT is connecting...' : 'Type a message...'}
+          placeholder={disabled ? 'Preparing chat...' : 'Type a message...'}
           type="text"
           value={content}
         />

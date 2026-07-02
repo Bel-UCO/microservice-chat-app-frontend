@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(() => readAuthSession())
   const [isBootstrapping, setIsBootstrapping] = useState(true)
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [isRegistering, setIsRegistering] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   useEffect(() => {
@@ -53,6 +54,18 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  const register = useCallback(async (payload) => {
+    setIsRegistering(true)
+    try {
+      const nextSession = await authApi.register(payload)
+      saveAuthSession(nextSession)
+      setSession(nextSession)
+      return nextSession
+    } finally {
+      setIsRegistering(false)
+    }
+  }, [])
+
   const logout = useCallback(async () => {
     setIsLoggingOut(true)
     try {
@@ -72,11 +85,13 @@ export function AuthProvider({ children }) {
       isAuthenticated: Boolean(session?.accessToken),
       isBootstrapping,
       isLoggingIn,
+      isRegistering,
       isLoggingOut,
       login,
+      register,
       logout,
     }),
-    [session, isBootstrapping, isLoggingIn, isLoggingOut, login, logout],
+    [session, isBootstrapping, isLoggingIn, isRegistering, isLoggingOut, login, register, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

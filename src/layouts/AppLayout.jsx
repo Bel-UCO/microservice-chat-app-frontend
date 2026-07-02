@@ -23,7 +23,7 @@ export function AppLayout() {
             <span className="logo-mark">P</span>
             <span>PulseChat</span>
           </NavLink>
-          <p className="sidebar-subtitle">Group rooms over EMQX MQTT</p>
+          <p className="sidebar-subtitle">Group rooms for your workspace</p>
         </div>
 
         <nav className="room-nav" aria-label="Chat rooms">
@@ -67,7 +67,7 @@ export function AppLayout() {
             <h2>Chat workspace</h2>
           </div>
           <div className="topbar-actions">
-            <ConnectionDot status="online" label="API session" />
+            <ConnectionDot status="online" label="Session active" />
             <button className="button button-soft" type="button" onClick={handleLogout} disabled={isLoggingOut}>
               {isLoggingOut ? 'Signing out...' : 'Logout'}
             </button>

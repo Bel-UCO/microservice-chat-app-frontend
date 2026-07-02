@@ -10,25 +10,25 @@ export function AuthLayout() {
           <span>{env.appName}</span>
         </div>
         <div className="hero-copy">
-          <p className="eyebrow">MQTT group messaging</p>
-          <h1>Real-time chat rooms for teams, classes, and operations.</h1>
+          <p className="eyebrow">Group messaging</p>
+          <h1>Fast, focused conversations for every team room.</h1>
           <p>
-            Frontend first architecture with real API authentication, protected
-            routes, HTTP utilities, and EMQX WebSocket messaging.
+            Create rooms, invite your team, and keep every conversation organized
+            in a simple real-time workspace.
           </p>
         </div>
         <div className="hero-stats">
           <div>
-            <strong>EMQX</strong>
-            <span>MQTT broker</span>
+            <strong>Secure</strong>
+            <span>account based access</span>
           </div>
           <div>
-            <strong>HTTP</strong>
-            <span>auth and room API</span>
+            <strong>Groups</strong>
+            <span>room based chats</span>
           </div>
           <div>
-            <strong>React</strong>
-            <span>route based UI</span>
+            <strong>Live</strong>
+            <span>real-time delivery</span>
           </div>
         </div>
       </section>

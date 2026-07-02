@@ -16,8 +16,15 @@ export default function ChatRoomPage() {
   const { rooms, isLoadingRooms } = useRooms()
   const room = useMemo(() => rooms.find((item) => item.id === roomId), [roomId, rooms])
   const messagesEndRef = useRef(null)
-  const { messages, isLoadingMessages, messagesError, fetchMessages, appendMessage } = useRoomMessages(roomId)
-  const { status, error, topic, publishMessage } = useMqttRoom(roomId, appendMessage)
+  const {
+    messages,
+    isLoadingMessages,
+    messagesError,
+    fetchMessages,
+    appendMessage,
+    sendMessage,
+  } = useRoomMessages(roomId)
+  const { status, error } = useMqttRoom(roomId, appendMessage)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -31,16 +38,13 @@ export default function ChatRoomPage() {
     return <section className="panel chat-panel"><p className="muted-text">Loading room...</p></section>
   }
 
-  const isComposerDisabled = status !== 'connected'
-
   return (
     <section className="chat-panel">
       <ChatHeader
-        mqttError={error}
-        mqttStatus={status}
+        realtimeError={error}
+        realtimeStatus={status}
         onRefresh={fetchMessages}
         room={room}
-        topic={topic}
       />
 
       {messagesError && <div className="alert alert-danger">{messagesError}</div>}
@@ -51,7 +55,7 @@ export default function ChatRoomPage() {
         {!isLoadingMessages && messages.length === 0 && (
           <EmptyState
             title="No messages yet"
-            description="Send the first message to this group room once MQTT is connected."
+            description="Send the first message to this group room."
           />
         )}
 
@@ -65,7 +69,7 @@ export default function ChatRoomPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      <MessageComposer disabled={isComposerDisabled} onSend={publishMessage} />
+      <MessageComposer disabled={!roomId} onSend={sendMessage} />
     </section>
   )
 }

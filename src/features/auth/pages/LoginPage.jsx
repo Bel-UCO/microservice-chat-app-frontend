@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.js'
 import { paths } from '../../../routes/paths.js'
 
 const initialForm = {
-  username: '',
+  email: '',
   password: '',
 }
 
@@ -24,13 +24,13 @@ export default function LoginPage() {
     event.preventDefault()
     setError('')
 
-    if (!form.username.trim() || !form.password) {
-      setError('Username and password are required.')
+    if (!form.email.trim() || !form.password) {
+      setError('Email and password are required.')
       return
     }
 
     try {
-      await login({ username: form.username.trim(), password: form.password })
+      await login({ email: form.email.trim(), password: form.password })
       navigate(location.state?.from || paths.rooms, { replace: true })
     } catch (err) {
       setError(err.message || 'Unable to login. Please check your credentials.')
@@ -41,21 +41,21 @@ export default function LoginPage() {
     <form className="login-card" onSubmit={handleSubmit}>
       <div className="form-heading">
         <p className="eyebrow">Welcome back</p>
-        <h2>Login to your chat workspace</h2>
-        <p>Use your backend account. This frontend will call <code>/auth/login</code>.</p>
+        <h2>Login to your workspace</h2>
+        <p>Continue your group conversations securely with your account.</p>
       </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       <label className="field-group">
-        <span>Username or email</span>
+        <span>Email</span>
         <input
-          autoComplete="username"
-          name="username"
+          autoComplete="email"
+          name="email"
           onChange={handleChange}
-          placeholder="example: belinda"
-          type="text"
-          value={form.username}
+          placeholder="belinda@example.com"
+          type="email"
+          value={form.email}
         />
       </label>
 
@@ -74,6 +74,10 @@ export default function LoginPage() {
       <button className="button button-primary button-full" type="submit" disabled={isLoggingIn}>
         {isLoggingIn ? 'Signing in...' : 'Sign in'}
       </button>
+
+      <p className="auth-switch">
+        New here? <Link to={paths.register}>Create an account</Link>
+      </p>
     </form>
   )
 }

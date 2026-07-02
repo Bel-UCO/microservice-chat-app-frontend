@@ -891,3 +891,15 @@ textarea:focus {
     justify-content: flex-start;
   }
 }
+
+.auth-switch {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0.25rem 0 0;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #c5ccff;
+  font-weight: 900;
+}
